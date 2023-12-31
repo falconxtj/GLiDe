@@ -18,9 +18,7 @@ Seqmap (developed by Jiang, H., Wong, W.H. (2008) Bioinformatics, 24(20)) is use
 2. Install Numpy version 1.19.1 or above
 3. Install Pandas version 1.1.0 or above
 4. Install RegEx version 2.5.83 or above
-5. Install SeqMap. Please go to the [official cite](http://www-personal.umich.edu/~jianghui/seqmap/download/seqmap-1.0.13-src.zip) and download the seqmap-1.0.13-src.zip. Please follow the instructions of SeqMap.
-   Briefly, unzip the file and open the command line window to use the cd command to the fold path and input "g++ -O3 -m64 -o seqmap match.cpp" or "g++ -O3 -m32 -o seqmap match.cpp" based on your computer system.
-   After that copy one seqmap executable file to your working directory.
+5. Install SeqMap. Please go to the [official cite](http://www-personal.umich.edu/~jianghui/seqmap/download/seqmap-1.0.13-src.zip) and download the seqmap-1.0.13-src.zip. Please follow the instructions of SeqMap. Briefly, unzip the file and open the command line window to use the cd command to the fold path and input "g++ -O3 -m64 -o seqmap match.cpp" or "g++ -O3 -m32 -o seqmap match.cpp" based on your computer system. After that copy one seqmap executable file to your working directory.
 
 ### Step 2: Prepare the necessary files. 
 
@@ -28,12 +26,9 @@ For one microorganism, two standard files are needed:
 
 1. **Sequence File**
 
-Sequence file should be single contig genome file (must in FASTA format, .fna or .fasta file eg.). In addition to the four bases (A, C, G and T), GLiDe also accepts mix-bases symbol
-(R, Y, M, K, S, W, H, B, V, D and N), other characters, like I (Hypoxanthine) or U (Uracil) are not accepted. Both upper and lower cases are acceptable.
+Sequence file should be single contig genome file (must in FASTA format, .fna or .fasta file eg.). In addition to the four bases (A, C, G and T), GLiDe also accepts mix-bases symbol (R, Y, M, K, S, W, H, B, V, D and N), other characters, like I (Hypoxanthine) or U (Uracil) are not accepted. Both upper and lower cases are acceptable.
 
-The header of the sequences should include both the complete GI (GenInfo Identifier) number and the accession number, separated by the "|" symbol. The header structure should be as follows:
-">gi|GI number|ref|accession number|". If the annotation file is in .ptt or .rnt format, the sequence file should only contain a single sequence contig with its corresponding header.
-However, if the annotation file is in .gff or .gff3 format, the sequence file can contain multiple sequence contigs, and their headers should have accession numbers that match those in the annotation file.
+The header of the sequences should include both the complete GI (GenInfo Identifier) number and the accession number, separated by the "|" symbol. The header structure should be as follows: ">gi|GI number|ref|accession number|". If the annotation file is in .ptt or .rnt format, the sequence file should only contain a single sequence contig with its corresponding header. However, if the annotation file is in .gff or .gff3 format, the sequence file can contain multiple sequence contigs, and their headers should have accession numbers that match those in the annotation file.
 
 For example, for *E. coli* K12 MG1655 strain, open the hyperlink below, find the directory for this strain:
 
@@ -53,69 +48,37 @@ To cope with this, we have two options. Firstly, download all relevant files (.f
 
 Sometimes, only a subset of genes (for example, all transcription factors) are of interest in particular research project. In these cases, you need to construct a [.fasta file](https://en.wikipedia.org/wiki/FASTA_format) for these genes containing all their DNA sequences, similar to .ffn (.frn) file mentioned above. You can name each gene uniquely as you like in the '>' line of this constructed .fasta file. Avoid to use ‘-’, ‘_’ and ‘ ’.(space) in these names. Besides, download .fna file (chromosome DNA sequence file) from relevant directory of the studied microorganisms as described above.
 
-3. **Coping with multiple copy issue**
-
-Some genes have multiple copies in the genome. If it is not specified, the program cannot design any sgRNA for such genes, because 'off-target' site due to other copies in the genome can be always identified for any designed sgRNA. Although it is generally a minor issue due to very small number of such genes, we still design a optional method to handle it. If you want to cope with this issue to make your sgRNA library more comprehensive, prepare another file by an all-against-all BLASTN. Install [BLAST+ package](ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/), make nucleotide sequence database for your .ffn (.frn) file by makeblastdb command and then run the following:
-
-"blastn -query your_.ff(r)n_file -db your_.ff(r)n_database -evalue 0.001 -out your_output_name -outfmt 6"
-
-The output file of this command will be used to identify the genes with multiple copies in the genome. The program will use a stringent threshold (identity > 95%, query coverage > 95%, hit coverage > 95%) to categorize genes with homology into clusters and regard each cluster of paralogs as functionally identical and design sgRNAs to target all of members of a cluster. To make the process simpler, we did not include these thresholds into the configure file (see below). For advanced users who are interested in adjusting these thresholds, please check the blast_filter.py script file and edit these three parameters. For details of the algorithm of this part, see our paper (cluster strategy). 
-
 ### Step 3: Set up the configure file (see example_configure.txt)
 The configure file is used to set all the necessary parameters and tell the program where to find necessary files. This file that contains a header is in a two-column format using colon (:) as delimiter. Each line starts with one word (name of one parameter) separated with the following (setting of this parameter) by a colon delimiter. We describe each parameter as below.
 
-**ORFcutoff**: The sgRNA location within the gene coding region (ORF 5’=0.0, ORF 3’=1.0) (default=0.05, real number belonging to (0.0,1.0)). We find that the sgRNAs exhibit **better activities locating within the first 5% of the coding region**. Hence, by default, the sgRNA is designed at this region as many as possible.
-
-**sgRNA_number**: The number of sgRNA you want to design for each gene (default=10, positive integer). According to the description of our paper, we find that **5-10 sgRNAs per gene is enough for pooled screening based functional genomics analysis**. However, more sgRNAs provide benefit (stronger statistical significance) for genes with only moderate phenotypic effect.
-
-**GCcontentMin**: The minimal GC content of spacer region (percentage) (default=30, positive integer between 0~100 is accepted).
-
-**GCcontentMax**: The maximum GC content of spacer region (percentage) (default=80, positive integer between 0~100 and > GCcontentMin is accepted). 
-
-In previous reports about dCas9 based CRISPRi system, GC content of sgRNA spacer region is found to be correlated with sgRNA activity. Extreme GC content reduces sgRNA activity. Hence, we suggest the abovementioned threshold. In situations of genome with relative low or high GC content, we suggest to adjust the threshold to (10,90). 
+**reference_file**: 
 
 **off_threshold**: the off target penalty threshold (default=20), sgRNAs with potential off-target site carrying penalty score lower than the threshold will be eliminated. For the detailed description of the scoring method, please check our paper. Briefly, we suggest off_threshold >= 20 for library design. In situations where more sgRNAs are desired, the threshold can be decreased to 10, where the off-target effect of CRISPRi is still very slight as previously reported (Gilbert Luke et al., Cell 2014).
 
+**GCcontent_min**: The minimal GC content of spacer region (percentage) (default=30, positive integer between 0~100 is accepted).
+
+**GCcontent_max**: The maximum GC content of spacer region (percentage) (default=80, positive integer between 0~100 and > GCcontentMin is accepted). 
+
+In previous reports about dCas9 based CRISPRi system, GC content of sgRNA spacer region is found to be correlated with sgRNA activity. Extreme GC content reduces sgRNA activity. Hence, we suggest the abovementioned threshold. In situations of genome with relative low or high GC content, we suggest to adjust the threshold to (10,90). 
+
+**target**: DNA sequence file for genes of interest (.ffn file of protein-coding genes and .frn file of RNA-coding genes for genome-scale sgRNA library design, or your customized file for focused sgRNA library design, see Step 2)
+
 **strand**: whether the sgRNA is designed targeting (binding) to the template or nontemplate stand of a coding gene (default=nontemplate, nontemplate or template is accepted). It is suggested by previous reports that dCas9 based CRISPRi system used in this work exhibits **better activity when targeting to non-template strand in the coding region**.
 
-**negative**: choose whether to design negative control sgRNAs (sgRNA with no significant target across the genome, which is used as negative control in the following pooled screening experiment and data analysis) for the experiment(Yes or No， default=Yes). We strongly recommend to include the negative control sgRNAs. For the description of negative control sgRNA usage, see our paper.
-
-**negative_number**: The number of negative control sgRNA you want to design for the experiment. If negative option is no, select 0 for this option. The default is 400. We recommand min(400, 5% of sgRNA library size) as the number of netagive control sgRNAs. 
-
-**targetFasta**: DNA sequence file for genes of interest (.ffn file of protein-coding genes and .frn file of RNA-coding genes for genome-scale sgRNA library design, or your customized file for focused sgRNA library design, see Step 2)
-
-**indexFile**: the gene sequence annotation file (.ptt file for protein-coding genes and .rnt file for RNA-coding genes, see Step 2).
-
-**genome**: the genome file (.fna file, see Step 2) used for off-target check.
-
-**multiple**: whether to cope with multiple copy issue or not (see step 2, default: No). If it is specified as 'Yes', it is need to prepare an additional blastn output file (see below and Step 2, "Coping with multiple copy issue" section).
-
-**blastresult**: blastn output file (see step 2, "Coping with multiple copy issue" section). **This one is optional, if you do not need it, just leave it blank, note that do not delete the ':' delimiter when leaving this parameter blank.**
-
-**genomewide**: whether to design genome-scale sgRNA library (see step 2, default: Yes). Prepare neccessary files based on the instructions in Step 2. You need to prepare three files (.fna, .ff(r)n, .pt(rn)t) if this parameter is set as 'Yes' and two files (.fna, .ff(r)n) in the case of 'No'.
-
-**prefix**: prefix used for naming of all output files, keep it simple without any ‘-’, ‘_’ and ‘ ’. For example, ‘design20171001’ is fine.
+**nc_number**: choose whether to design negative control sgRNAs (sgRNA with no significant target across the genome, which is used as negative control in the following pooled screening experiment and data analysis) for the experiment(Yes or No， default=Yes). We strongly recommend to include the negative control sgRNAs. For the description of negative control sgRNA usage, see our paper. The number of negative control sgRNA you want to design for the experiment. If negative option is no, select 0 for this option. The default is 400. We recommand min(400, 5% of sgRNA library size) as the number of netagive control sgRNAs. 
 
 Below is **an example configure file with default parameters**.
 
 parameter|value
 ---------|-----
 [configdesign]
-ORFcutoff:|0.05
-sgRNA_number:|10    
-GCcontentMin:|30
-GCcontentMax:|80
-off_threshold:|20
-strand:|nontemplate 
-negative:|Yes
-negative_number:|400
-targetFasta:|example.ffn
-indexFile:|example.ptt
-genome:|example.fna
-blastresult:|example_blastresult
-multiple:|Yes
-genomewide:|Yes
-prefix:|example_output
+reference_file:|example.gff,example.fna
+off_threshold:|20    
+GCcontent_min:|30
+GCcontent_max:|80
+target:|cds
+strand:|nontemplate
+nc_number:|400
 
 After Step 2 and 3, check your working directory. It should looks like below:
 [here](./image/files_prepared_before_library_design.png)
@@ -125,7 +88,7 @@ Open the command line window (for example, terminal in Macbook), cd to the worki
 
 cd path_to_your_working_directory
 
-python sgRNA_desgin_main.py configure.txt
+python sgRNA_desgin.py configure.txt
 
 We also post a toy example together with the scripts and the example_configure.txt has been edit to make it compatible. For this test, cd to the working directory, type in: 
 
