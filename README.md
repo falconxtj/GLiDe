@@ -73,9 +73,10 @@ parameter|value
 ---------|-----
 [configdesign]
 reference_file:|example.gff,example.fna
-off_threshold:|20    
+off_threshold:|20
 GCcontent_min:|30
 GCcontent_max:|80
+spacer_length:|20
 target:|cds
 strand:|nontemplate
 nc_number:|400
