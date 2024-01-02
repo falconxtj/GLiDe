@@ -19,6 +19,7 @@ Seqmap (developed by Jiang, H., Wong, W.H. (2008) Bioinformatics, 24(20)) is use
 3. Install Pandas version 1.1.0 or above
 4. Install RegEx version 2.5.83 or above
 5. Install SeqMap. Please go to the [official cite](http://www-personal.umich.edu/~jianghui/seqmap/download/seqmap-1.0.13-src.zip) and download the seqmap-1.0.13-src.zip. Please follow the instructions of SeqMap. Briefly, unzip the file and open the command line window to use the cd command to the fold path and input "g++ -O3 -m64 -o seqmap match.cpp" or "g++ -O3 -m32 -o seqmap match.cpp" based on your computer system. After that copy one seqmap executable file to your working directory.
+6. Install blast. Please go to the [official site](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/) and download blast version 2.15.0 or above. After installation, please add blast to PATH.
 
 ### Step 2: Prepare the necessary files. 
 
