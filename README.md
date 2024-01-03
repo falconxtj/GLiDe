@@ -19,7 +19,7 @@ Seqmap (developed by Jiang, H., Wong, W.H. (2008) Bioinformatics, 24(20)) is use
 3. Install Pandas version 1.1.0 or above
 4. Install RegEx version 2.5.83 or above
 5. Install SeqMap. Please go to the [official cite](http://www-personal.umich.edu/~jianghui/seqmap/download/seqmap-1.0.13-src.zip) and download the seqmap-1.0.13-src.zip. Please follow the instructions of SeqMap. Briefly, unzip the file and open the command line window to use the cd command to the fold path and input "g++ -O3 -m64 -o seqmap match.cpp" or "g++ -O3 -m32 -o seqmap match.cpp" based on your computer system. After that copy one seqmap executable file to your working directory.
-6. Install blast. Please go to the [official site](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/) and download blast version 2.15.0 or above. After installation, please add blast to PATH.
+6. Install blast. Please go to the [official site](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/) and download blast version 2.15.0 or above. For Windows users, after installation, please add your_installation_path/NCBI/blast-2.15.0+/bin to PATH.
 
 ### Step 2: Prepare the necessary files. 
 
@@ -29,7 +29,7 @@ For one microorganism, two standard files are needed:
 
 Sequence file should be single contig genome file (must in FASTA format, .fna or .fasta file eg.). In addition to the four bases (A, C, G and T), GLiDe also accepts mix-bases symbol (R, Y, M, K, S, W, H, B, V, D and N), other characters, like I (Hypoxanthine) or U (Uracil) are not accepted. Both upper and lower cases are acceptable.
 
-The header of the sequences should include both the complete GI (GenInfo Identifier) number and the accession number, separated by the "|" symbol. The header structure should be as follows: ">gi|GI number|ref|accession number|". If the annotation file is in .ptt or .rnt format, the sequence file should only contain a single sequence contig with its corresponding header. However, if the annotation file is in .gff or .gff3 format, the sequence file can contain multiple sequence contigs, and their headers should have accession numbers that match those in the annotation file.
+The header of the sequences should include accession number and name, separated by space and leading by the ">" symbol. An example of a header structure is: ">NZ_LR881938.1 Escherichia coli str. K-12 substr. MG1655 strain K-12 chromosome MG1655, complete sequence". If the annotation file is in .ptt or .rnt format, the sequence file should only contain a single sequence contig with its corresponding header. However, if the annotation file is in .gff or .gff3 format, the sequence file can contain multiple sequence contigs, and their headers should have accession numbers that match those in the annotation file.
 
 For example, for *E. coli* K12 MG1655 strain, open the hyperlink below, find the directory for this strain:
 
@@ -45,14 +45,10 @@ In most microorganisms, all genes are encoded by a single chromosome. In these c
 
 To cope with this, we have two options. Firstly, download all relevant files (.ffn, .ptt or .frn, .rnt + .fna) of one plasmid as described above; replace the .fna file here with the .fna file corresponding to the chromosome; process this palsmid as the chromosome as described above. Secondly, download all relevant files (.ffn or .frn) of all plasmids and combine them, resulting in combined files with .ffn(.frn) extension, respectively (note that in file combination process, remove those header lines and only keep them for the combined file at the very beginning), then use the 'genomewide'='No' mode (see below, focused library) in the package to process this file with chromosome .fna file to detect off-target. Hence, the first approach is a 'one-contig-one-running' method, whereas the second is a 'multiple-contigs-one-running' strategy. Note that for the second approach, you may need to edit the name of each gene of your combined file (> line), because in this mode, gene annotation (.ptt or .rnt) is not included. To make the names of the designed sgRNAs more intuitive, such editing is neccessary.
 
-2. **For focused library**
-
-Sometimes, only a subset of genes (for example, all transcription factors) are of interest in particular research project. In these cases, you need to construct a [.fasta file](https://en.wikipedia.org/wiki/FASTA_format) for these genes containing all their DNA sequences, similar to .ffn (.frn) file mentioned above. You can name each gene uniquely as you like in the '>' line of this constructed .fasta file. Avoid to use ‘-’, ‘_’ and ‘ ’.(space) in these names. Besides, download .fna file (chromosome DNA sequence file) from relevant directory of the studied microorganisms as described above.
-
 ### Step 3: Set up the configure file (see example_configure.txt)
 The configure file is used to set all the necessary parameters and tell the program where to find necessary files. This file that contains a header is in a two-column format using colon (:) as delimiter. Each line starts with one word (name of one parameter) separated with the following (setting of this parameter) by a colon delimiter. We describe each parameter as below.
 
-**reference_file**: 
+**reference_file**: the gene sequence annotation file and the 
 
 **off_threshold**: the off target penalty threshold (default=20), sgRNAs with potential off-target site carrying penalty score lower than the threshold will be eliminated. For the detailed description of the scoring method, please check our paper. Briefly, we suggest off_threshold >= 20 for library design. In situations where more sgRNAs are desired, the threshold can be decreased to 10, where the off-target effect of CRISPRi is still very slight as previously reported (Gilbert Luke et al., Cell 2014).
 
@@ -62,11 +58,13 @@ The configure file is used to set all the necessary parameters and tell the prog
 
 In previous reports about dCas9 based CRISPRi system, GC content of sgRNA spacer region is found to be correlated with sgRNA activity. Extreme GC content reduces sgRNA activity. Hence, we suggest the abovementioned threshold. In situations of genome with relative low or high GC content, we suggest to adjust the threshold to (10,90). 
 
-**target**: DNA sequence file for genes of interest (.ffn file of protein-coding genes and .frn file of RNA-coding genes for genome-scale sgRNA library design, or your customized file for focused sgRNA library design, see Step 2)
+**target**: the target for the designed sgRNA library, which can be chosen from either the coding sequence (cds) or RNA coding genes (RNA).
 
-**strand**: whether the sgRNA is designed targeting (binding) to the template or nontemplate stand of a coding gene (default=nontemplate, nontemplate or template is accepted). It is suggested by previous reports that dCas9 based CRISPRi system used in this work exhibits **better activity when targeting to non-template strand in the coding region**.
+DNA sequence file for genes of interest (.ffn file of protein-coding genes and .frn file of RNA-coding genes for genome-scale sgRNA library design, or your customized file for focused sgRNA library design, see Step 2)
 
-**nc_number**: choose whether to design negative control sgRNAs (sgRNA with no significant target across the genome, which is used as negative control in the following pooled screening experiment and data analysis) for the experiment(Yes or No， default=Yes). We strongly recommend to include the negative control sgRNAs. For the description of negative control sgRNA usage, see our paper. The number of negative control sgRNA you want to design for the experiment. If negative option is no, select 0 for this option. The default is 400. We recommand min(400, 5% of sgRNA library size) as the number of netagive control sgRNAs. 
+**strand**: whether the sgRNA is designed targeting (binding) to the template or nontemplate stand of a coding gene (default=nontemplate, nontemplate or template is accepted). In the case of common CRISPRi systems, the non-template strand is preferred for effective gene silencing. However, we offer the alternative choice for applications that do not have a strand preference **better activity when targeting to non-template strand in the coding region**.
+
+**nc_number**: the number of negative control sgRNAs (sgRNA with no significant target across the genome, which is used as negative control in the following pooled screening experiment and data analysis) for the experiment(enter 0 if not needed). We strongly recommend to include the negative control sgRNAs. For the description of negative control sgRNA usage, see our paper. The number of negative control sgRNA you want to design for the experiment. If negative option is no, select 0 for this option. The default is 400. We recommand min(400, 5% of sgRNA library size) as the number of netagive control sgRNAs. 
 
 Below is **an example configure file with default parameters**.
 
