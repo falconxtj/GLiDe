@@ -31,19 +31,12 @@ Sequence file should be single contig genome file (must in FASTA format, .fna or
 
 The header of the sequences should include accession number and name, separated by space and leading by the ">" symbol. An example of a header structure is: ">NZ_LR881938.1 Escherichia coli str. K-12 substr. MG1655 strain K-12 chromosome MG1655, complete sequence". If the annotation file is in .ptt or .rnt format, the sequence file should only contain a single sequence contig with its corresponding header. However, if the annotation file is in .gff or .gff3 format, the sequence file can contain multiple sequence contigs, and their headers should have accession numbers that match those in the annotation file.
 
-For example, for *E. coli* K12 MG1655 strain, open the hyperlink below, find the directory for this strain:
+2. **Annotation File**
+Regarding the annotation file format, GLiDe accepts the General Feature Format (GFF/GFF3 eg.), as well as two older versions: the protein table file (PTT eg.) and the RNA table file (RNT eg.). When using the PTT or RNT formats, it's important to ensure that the "Design Target" parameter aligns with the file type uploaded (choose "CDS" for PTT format and "RNA" for RNT format).
 
-ftp://http.ncbi.nlm.nih.gov/genomes/archive/old_refseq/Bacteria/Escherichia_coli_K_12_substr__MG1655_uid57779/ 
+The annotation file can be customized for tailored library design, allowing users to delete specific sequences from standard files in order to design an sgRNA library for selected regions.
 
-You can find the content under this directory: [here](./image/NCBI_refseq_E.coli.png)
-
-Download files with .fna (genome as a single contig); .ppt (protein-coding gene annotation) and .ffn (protein-coding gene .fasta file) extensions. If you are also interested in RNA-coding genes, download files with .fna (genome as a single contig); .rnt (RNA-coding gene annotation) and .frn (RNA-coding gene .fasta file) extensions. Follow the same instructions as described above. We strongly recommand to process protein- and RNA-coding gene sgRNA library design seperately (run one process with .fna, .ptt, .ffn and configure files; run another with .fna, .rnt, .frn and configure files), because different parameters may be needed in the configure file (see below), due to the fact that RNA-coding genes tent to have much smaller coding regions in contrast to their protein-coding counterparts.
-
-In most microorganisms, all genes are encoded by a single chromosome. In these cases, we can only find one file each with abovementioned three extensions, respectively. In other rare cases where the microorganisms carry several plasmids to encode genes, you may be interested in designing sgRNA library for all genes. 
-
-(for example: ftp://ftp.ncbi.nlm.nih.gov/genomes/archive/old_refseq/Bacteria/Methylobacterium_extorquens_AM1_uid57605/ see the content under this directory [here](./image/NCBI_refseq_AM1.png))
-
-To cope with this, we have two options. Firstly, download all relevant files (.ffn, .ptt or .frn, .rnt + .fna) of one plasmid as described above; replace the .fna file here with the .fna file corresponding to the chromosome; process this palsmid as the chromosome as described above. Secondly, download all relevant files (.ffn or .frn) of all plasmids and combine them, resulting in combined files with .ffn(.frn) extension, respectively (note that in file combination process, remove those header lines and only keep them for the combined file at the very beginning), then use the 'genomewide'='No' mode (see below, focused library) in the package to process this file with chromosome .fna file to detect off-target. Hence, the first approach is a 'one-contig-one-running' method, whereas the second is a 'multiple-contigs-one-running' strategy. Note that for the second approach, you may need to edit the name of each gene of your combined file (> line), because in this mode, gene annotation (.ptt or .rnt) is not included. To make the names of the designed sgRNAs more intuitive, such editing is neccessary.
+If a user only has the sequence file and lacks an annotation file, they can obtain one through a standard genome annotation pipeline such as the Prokaryotic Genome Annotation Pipeline (PGAP).
 
 ### Step 3: Set up the configure file (see example_configure.txt)
 The configure file is used to set all the necessary parameters and tell the program where to find necessary files. This file that contains a header is in a two-column format using colon (:) as delimiter. Each line starts with one word (name of one parameter) separated with the following (setting of this parameter) by a colon delimiter. We describe each parameter as below.
