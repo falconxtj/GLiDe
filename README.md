@@ -89,46 +89,20 @@ Below is the description. For the mathematical processing, see our paper.
 The main output of gLiDe is a list containing all sgRNAs (in Excel format). In the list sgRNAs are classified with their targeted genes and labeled with their start positions.
 
 Seqid|Source|Type|Start|End|Score|Strand|Phase|Attributes|Length|Guide_seq|Guide_pos|guide_num
-...|...|...|...|...|...|...|...|...|...|...|...|...
-NC_000913.3	RefSeq	CDS	190	255	.	+	0	ID=cds-NP_414542.1;Parent=gene-b0001;Dbxref=UniProtKB/Swiss-Prot:P0AD86,Genbank:NP_414542.1,ASAP:ABE-0000006,ECOCYC:EG11277,GeneID:944742;Name=NP_414542.1;gbkey=CDS;gene=thrL;locus_tag=b0001;orig_transcript_id=gnl[b0001]mrna.NP_414542;product=thr operon leader peptide;protein_id=NP_414542.1;transl_table=11|21|['GGTGGTGCTAATGCGTTTCA', 'CGCACCGTTACCTGTGGTAA']|[210, 249]|2
+-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----
+NC_000913.3|RefSeq|CDS|190|255|.|+|0|ID=cds-NP_414542.1;Parent=gene-b0001;Dbxref=UniProtKB/Swiss-Prot:P0AD86,Genbank:NP_414542.1,ASAP:ABE-0000006,ECOCYC:EG11277,GeneID:944742;Name=NP_414542.1;gbkey=CDS;gene=thrL;locus_tag=b0001;orig_transcript_id=gnl[b0001]mrna.NP_414542;product=thr operon leader peptide;protein_id=NP_414542.1;transl_table=11|21|['GGTGGTGCTAATGCGTTTCA', 'CGCACCGTTACCTGTGGTAA']|[210, 249]|2
 ...|...|...|...|...|...|...|...|...|...|...|...|...
 
 For each gene, sgRNAs are ranked by their distance to the start codon, those closer to transcription start sites are at the top. Genes are sorted in their natural order.
+
 Negative control sgRNAs (if designed) would be placed in the last row of the list.
+
 This table is temporarily saved on the server, user has to download the Excel form for inspection.
 
-**prefix.cluster.txt**: Clusters of genes with homologs (see Step 2, "Coping with multiple copy issue" section). The file has no header line and uses tab as delimiter. It is consisted of two columns: cluster name and the genes in each cluster. Genes in one cluster are separated by comma.
+**Output 2: Off-target Log List**
+This list contains sgRNAs predicted to have potential off-target hits. All unselected sgRNAs with their predicted off-target sequences would be listed inside. This table is also temporarily saved on the server, user has to download the Excel form for inspection.
 
-araFb1901|araFb1901
--------|--------------------
-yjhXb4566|yjhXb4566
-tufAb3339|tufAb3339,tufBb3980
-...|...
-
-**prefix.gene_statistics.txt**: file in .csv format with one header line contains the length and the designed sgRNA numbers of each gene.
-
-gene_name|gene_length|sgRNA_number_in_gene
----------|-----------|--------------------
-ydcCb1460|1137|0
-insI1b4284|1152|10
-pinRb1374|591|9
-
-**prefix.fasta.txt**: target gene sequences in .fasta format. It is similar to the input gene fasta file. For genome-wide sgRNA library design, we use the combination of gene and synonym (.ptt or .rnt annotation file) to rename each gene. Hence, we give the refined .fasta file with new gene names for some convenience in following usage.
-
-**N20_library.csv**: the sgRNA library file is at .csv formate **containing one header line**, in which there are three columns in order of id, sequence and gene respectively. **Use comma as delimiter**. If negative control (NC) sgRNAs are within this synthetic library (specified in configure file), name them NCx and assign '0' at 'gene' column of these sgRNAs. This file is used as input for the data processing subpackage after pooled screening experiment and NGS.
-
-id|sequence|gene
---|--------|----
-sgRNA1|ATCCCCCCCCCCGGGGG|recA
-NC1|TGTGTGTGTGTGTGTGTGTG|0
-...|...|...
-
-**sgRNA_position.txt**: Flat file of sgRNA position (relative location of sgRNA in the coding region) information in gene **without header line**. The file contains three columns in order of gene name, sgRNAid and the relative position of sgRNA in the gene. Actually, you can also find this file as output of our library design subpackage. This file is also used as input for the data processing subpackage after pooled screening experiment and NGS.
-
-rsmE|rsmE_9|0.012
-----|------|-----
-rsmE|rsmE_10|0.014
-0|NC1|0
-...|...|...
-
-Two .png figures use histogram to summarize the basic information of [number of sgRNA per gene](./image/The_distrution_of_sgRNA_number_per_gene.png) and [position of sgRNAs in the coding region of relevant genes](./image/The_distrution_of_sgRNA_position_per_gene.png).
+ID|sequence|offtarget_sequence|penalty|off_num
+---|---|---|---|---
+5704|AAACACCAGTTCGCCATTGC|['CGAATACAGTACGCCATTGC', 'GAAGAGCTTTCCGCCATTGC']|[17.0, 19.0]|2
+...|...|...|...|...
