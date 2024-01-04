@@ -86,7 +86,7 @@ You can find many files under the result directory, two excels are the final res
 Below is the description. For the mathematical processing, see our paper.
 
 **Output 1: Guide Library List**
-The main output of gLiDe is a list containing all sgRNAs (in Excel format). In the list sgRNAs are classified with their targeted genes and labeled with their start positions.
+The main output of GLiDe is a list containing all sgRNAs (in Excel format). In the list sgRNAs are classified with their targeted genes and labeled with their start positions.
 
 Seqid|Source|Type|Start|End|Score|Strand|Phase|Attributes|Length|Guide_seq|Guide_pos|guide_num
 -----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----
