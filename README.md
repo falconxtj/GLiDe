@@ -67,9 +67,6 @@ target:|cds
 strand:|nontemplate
 nc_number:|400
 
-After Step 2 and 3, check your working directory. It should looks like below:
-[here](./image/files_prepared_before_library_design.png)
-
 ### Step 4：Run the pipeline
 Open the command line window, cd to the working directory and run the analysis pipeline.
 
@@ -84,24 +81,21 @@ python sgRNA_desgin_main.py example_configure.txt
 For a typical laptop, the example test can be finalized within 5 minutes. The rate-limiting step is off-target site identification across the genome.
 
 ## Output description
-The output files will be organized in the subdirectory whose name is specified by the 'prefix' option in configure file under the working directory (prefiex/). We term this subdirectory 'result directory' thereafter.
+You can find many files under the result directory, two excels are the final results: gene_info.xlsx and offtarget_log.xlsx.
 
-You can find many files under the result directory.
+Below is the description. For the mathematical processing, see our paper.
 
-[your result directory after running the test](./image/resultdir_after_example_running.png)
+**Output 1: Guide Library List**
+The main output of gLiDe is a list containing all sgRNAs (in Excel format). In the list sgRNAs are classified with their targeted genes and labeled with their start positions.
 
-Below is the description. For the mathematical processing, see our paper. **All .csv flat files use tab as delimiter unless mentioned**
+Seqid|Source|Type|Start|End|Score|Strand|Phase|Attributes|Length|Guide_seq|Guide_pos|guide_num
+...|...|...|...|...|...|...|...|...|...|...|...|...
+NC_000913.3	RefSeq	CDS	190	255	.	+	0	ID=cds-NP_414542.1;Parent=gene-b0001;Dbxref=UniProtKB/Swiss-Prot:P0AD86,Genbank:NP_414542.1,ASAP:ABE-0000006,ECOCYC:EG11277,GeneID:944742;Name=NP_414542.1;gbkey=CDS;gene=thrL;locus_tag=b0001;orig_transcript_id=gnl[b0001]mrna.NP_414542;product=thr operon leader peptide;protein_id=NP_414542.1;transl_table=11|21|['GGTGGTGCTAATGCGTTTCA', 'CGCACCGTTACCTGTGGTAA']|[210, 249]|2
+...|...|...|...|...|...|...|...|...|...|...|...|...
 
-**prefix.N20.fasta.txt**: sgRNA library sequences (N20) in .fasta format, including negative control sgRNAs if it is specified in the configure file. **This file, after adding designed flanking nucleotides, can be subjected to microarray based oligomer synthesis** to prepare the sgRNA library. 
-
-**prefix.N20NGG.fasta.txt**: The reverse complementary of target region of each sgRNA including the PAM site in .fasta format.
-
-**prefix.sgRNA_statistics.txt**: position information within relevant gene coding region and the GC content of each designed sgRNA in .csv format.
-
-sgRNAID|sgRNA_position_in_gene |GCcontent
--------|-----------------------|---------
-insI1b4284_32|0.028|39.13
-...|...|...
+For each gene, sgRNAs are ranked by their distance to the start codon, those closer to transcription start sites are at the top. Genes are sorted in their natural order.
+Negative control sgRNAs (if designed) would be placed in the last row of the list.
+This table is temporarily saved on the server, user has to download the Excel form for inspection.
 
 **prefix.cluster.txt**: Clusters of genes with homologs (see Step 2, "Coping with multiple copy issue" section). The file has no header line and uses tab as delimiter. It is consisted of two columns: cluster name and the genes in each cluster. Genes in one cluster are separated by comma.
 
