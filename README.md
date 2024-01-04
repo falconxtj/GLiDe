@@ -1,15 +1,11 @@
 # GLiDe: Guide Library Designer (offline package)
 
 ## What is this?
-This python script collection is the offline software package of [GLiDe](https://www.thu-big.net/sgRNA_design/), a publicly avaliable web server used for genome-wide or focused sgRNA library design for
-CRISPRi systems. The basic description of this program can be found at [BioRxiv](https://www.biorxiv.org/content/10.1101/2022.11.25.517898v3).
-Please cite this paper or subsequent peer-reviewed publication if this program is useful to your work.
+This python script collection is the offline software package of [GLiDe](https://www.thu-big.net/sgRNA_design/), a publicly avaliable web server used for genome-wide or focused sgRNA library design for CRISPRi systems. The basic description of this program can be found at [BioRxiv](https://www.biorxiv.org/content/10.1101/2022.11.25.517898v3). Please cite this paper or subsequent peer-reviewed publication if this program is useful to your work.
 
-This script collection is user-friendly for experimental biologists with no or limited programming expertise. Generally, the user only need to download the script and several standard files
-(genome, annotation, etc), edit a configure file to set several parameters needed for sgRNA design,
-and type in one command line in a Linux environment (for example, terminal in MacOS) to initiate the design process.
-The output includes the .fasta file for sgRNA and statistics-describing tables as well as figures to intuitively overview the design result.
-Seqmap (developed by Jiang, H., Wong, W.H. (2008) Bioinformatics, 24(20)) is used in our program for off-target identification and elimination.
+This script collection is user-friendly for experimental biologists with no or limited programming expertise. Generally, the user only need to download the script and several standard files (genome, annotation, etc), edit a configure file to set several parameters needed for sgRNA design, and type in one command line in a Linux environment (for example, terminal in MacOS) to initiate the design process.
+
+The output includes the .fasta file for sgRNA and statistics-describing tables as well as figures to intuitively overview the design result. Seqmap (developed by Jiang, H., Wong, W.H. (2008) Bioinformatics, 24(20)) is used in our program for off-target identification and elimination.
 
 ## How to use it?
 ### Step 1: Install the necessary packages.
