@@ -32,22 +32,22 @@ The annotation file can be customized for tailored library design, allowing user
 
 If a user only has the sequence file and lacks an annotation file, they can obtain one through a standard genome annotation pipeline such as the Prokaryotic Genome Annotation Pipeline (PGAP).
 
+both reference files can be easily downloaded from publicly avaliable databases like NCBI, KEGG, etc.
+
 ### Step 3: Set up the configure file (see example_configure.txt)
 The configure file is used to set all the necessary parameters and tell the program where to find necessary files. This file that contains a header is in a two-column format using colon (:) as delimiter. Each line starts with one word (name of one parameter) separated with the following (setting of this parameter) by a colon delimiter. We describe each parameter as below.
 
-**reference_file**: the gene sequence annotation file and the 
+**reference_file**: the gene sequence file and the corresponding annotation file. GLiDe accepts multiple reference files at the same time, in this case, input each sequence file right behind its corresponding annotation file, an example is "reference_file:annotation_1.gff,sequence_1.fna,annotation_2.gff,sequence_2.fna"
 
-**off_threshold**: the off target penalty threshold (default=20), sgRNAs with potential off-target site carrying penalty score lower than the threshold will be eliminated. For the detailed description of the scoring method, please check our paper. Briefly, we suggest off_threshold >= 20 for library design. In situations where more sgRNAs are desired, the threshold can be decreased to 10, where the off-target effect of CRISPRi is still very slight as previously reported (Gilbert Luke et al., Cell 2014).
+**off_threshold**: The penalty score is employed for quality control of sgRNAs (default=20). GLiDe employs the seed region principle and penalty scoring metrics (see our paper for detail) to evaluate off-targets. An off-target site is identified when the penalty score is less than the user-defined threshold, considering that mismatches are generally better tolerated at the 5′ end than at the 3′ end. Three regions are categorized based on their proximity to the PAM sequence.
 
-**GCcontent_min**: The minimal GC content of spacer region (percentage) (default=30, positive integer between 0~100 is accepted).
+**GCcontent_min**: The minimal GC content of spacer region (percentage) (default=20, positive integer between 0~100 is accepted).
 
 **GCcontent_max**: The maximum GC content of spacer region (percentage) (default=80, positive integer between 0~100 and > GCcontentMin is accepted). 
 
-In previous reports about dCas9 based CRISPRi system, GC content of sgRNA spacer region is found to be correlated with sgRNA activity. Extreme GC content reduces sgRNA activity. Hence, we suggest the abovementioned threshold. In situations of genome with relative low or high GC content, we suggest to adjust the threshold to (10,90). 
+In previous reports about dCas9 based CRISPRi system, GC content of sgRNA spacer region is found to be correlated with sgRNA activity. Extreme GC content reduces sgRNA activity. Hence, we suggest the abovementioned threshold. In situations of genome with relative low or high GC content, we suggest to adjust the threshold to (20,80). 
 
-**target**: the target for the designed sgRNA library, which can be chosen from either the coding sequence (cds) or RNA coding genes (RNA).
-
-DNA sequence file for genes of interest (.ffn file of protein-coding genes and .frn file of RNA-coding genes for genome-scale sgRNA library design, or your customized file for focused sgRNA library design, see Step 2)
+**target**: the target for the designed sgRNA library, which can be chosen from either the coding sequence (cds) or RNA coding genes (RNA). This parameter must match the format of annotation file used in step 2, "cds" for PTT format and "RNA" for RNT format.
 
 **strand**: whether the sgRNA is designed targeting (binding) to the template or nontemplate stand of a coding gene (default=nontemplate, nontemplate or template is accepted). In the case of common CRISPRi systems, the non-template strand is preferred for effective gene silencing. However, we offer the alternative choice for applications that do not have a strand preference **better activity when targeting to non-template strand in the coding region**.
 
