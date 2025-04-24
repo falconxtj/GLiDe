@@ -467,7 +467,6 @@ def main(prefix, configureFile):
     gene_info = pd.DataFrame(columns=['Seqid', 'Source', 'Type', 'Start', 'End', 'Score', 'Strand', 'Phase', 'Attributes', 'Length'])
     fasta_info = pd.DataFrame(columns=['Seqid', 'Source', 'Type', 'Start', 'End', 'Score', 'Strand', 'Phase', 'Attributes'])
     sequence_dic = {}
-    print(len(reference_file))
     for i in range(0, int(len(reference_file) / 2)):
         genome_file = reference_file[2 * i + 1]
         genome_format = genome_file.split('.')[-1]
