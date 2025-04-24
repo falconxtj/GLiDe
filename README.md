@@ -12,7 +12,7 @@ To use this offline version, the user only need to download the main script and 
 2. Install Numpy version 1.19.1 or above
 3. Install Pandas version 1.1.0 or above
 4. Install RegEx version 2.5.83 or above
-5. Install SeqMap. Please go to the [official cite](http://www-personal.umich.edu/~jianghui/seqmap/download/seqmap-1.0.13-src.zip) and download the seqmap-1.0.13-src.zip. Please follow the instructions of SeqMap. Briefly, unzip the file and open the command line window to use the cd command to the fold path and input "g++ -O3 -m64 -o seqmap match.cpp" or "g++ -O3 -m32 -o seqmap match.cpp" based on your computer system. After that copy one seqmap executable file to your working directory.
+5. Install SeqMap. Please go to the [official cite]([http://www-personal.umich.edu/~jianghui/seqmap/download/seqmap-1.0.13-src.zip](https://jhui2014.github.io/seqmap/)) and download the seqmap-1.0.13-src.zip. Please follow the instructions of SeqMap. Briefly, unzip the file and open the command line window to use the cd command to the fold path and input "g++ -O3 -m64 -o seqmap match.cpp" or "g++ -O3 -m32 -o seqmap match.cpp" based on your computer system. After that please add your_installation_path to PATH.
 6. Install blast. Please go to the [official site](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/) and download blast version 2.15.0 or above. For Windows users, after installation, please add your_installation_path/NCBI/blast-2.15.0+/bin to PATH.
 
 ### Step 2: Prepare the necessary files. 
